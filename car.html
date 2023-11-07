@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      #box {
+        position: relative;
+        width: 400px;
+        height: 400px;
+        background-color: lightgray;
+      }
+
+      #car {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        background-color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="box">
+      <div id="car"></div>
+    </div>
+
+    <script>
+      const car = document.getElementById("car");
+      const box = document.getElementById("box");
+
+      let x = 0;
+      let y = 0;
+      let directionX = 1; // 1 for right, -1 for left
+      let directionY = 0; // 1 for down, -1 for up
+      let step = 1; // Current step
+
+      function moveCar() {
+        switch (step) {
+          case 1:
+            x += directionX;
+            if (x === box.clientWidth - car.clientWidth) {
+              step = 2; // Move down
+              directionX = 0;
+              directionY = 1;
+            }
+            break;
+          case 2:
+            y += directionY;
+            if (y === box.clientHeight - car.clientHeight) {
+              step = 3; // Move up diagonally
+              directionX = -1;
+              directionY = -1;
+            }
+            break;
+          case 3:
+            x += directionX;
+            y += directionY;
+            if (x === 0 && y === 0) {
+              step = 4; // Come down
+              directionX = 0;
+              directionY = 1;
+            }
+            break;
+          case 4:
+            y += directionY;
+            if (y === box.clientHeight - car.clientHeight) {
+              step = 5; // Move diagonally towards right
+              directionX = 1;
+              directionY = -1;
+            }
+            break;
+          case 5:
+            x += directionX;
+            y += directionY;
+            if (y === 0) {
+              step = 6; // Move down again
+              directionX = 0;
+              directionY = 1;
+            }
+            break;
+          case 6:
+            y += directionY;
+            if (y === box.clientWidth - car.clientWidth) {
+              step = 7; // Move left
+              directionX = -1;
+              directionY = 0;
+            }
+            break;
+          case 7:
+            x += directionX;
+            if (x === 0) {
+              step = 8; // Stop
+              directionX = 0;
+              directionY = 0;
+            }
+            break;
+        }
+
+        car.style.left = x + "px";
+        car.style.top = y + "px";
+
+        if (step !== 9) {
+          requestAnimationFrame(moveCar);
+        }
+      }
+
+      moveCar();
+    </script>
+  </body>
+</html>
